@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+  <style>
+    .flex {
+      display: flex;
+    }
+
+    .container {
+      height: 400px;
+      margin-inline: 5vw;
+    }
+
+    .pole {
+      flex: 0 0 30vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    #pole1 {
+      background-color: red;
+    }
+
+    #pole2 {
+      background-color: green;
+    }
+
+    #pole3 {
+      background-color: blue;
+    }
+
+    .disk {
+      background-color: var(--bg-color);
+      border-radius: 10px;
+      height: 35px;
+      margin-inline: auto;
+      width: calc(var(--width) * 50px);
+
+    }
+
+    .pole :not(:first-child) {
+      pointer-events: none;
+    }
+
+    #moves {
+      text-align: center;
+      padding-bottom: 30px;
+      padding-top: 50px;
+    }
+
+    #counter {
+      width: 40px;
+      height: 22px;
+      border-radius: 10px;
+    }
+
+    #space {
+      margin-left: 10px;
+    }
+
+    #win {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .disk:not(:first-child) {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="flex container">
+    <div class="flex pole" id="pole1">
+      <div class="disk ui-widget-content" style="--width: 1; --bg-color: yellow" id="disk1" data-size="1"></div>
+      <div class="disk ui-widget-content" style="--width: 2; --bg-color: gray" id="disk2" data-size="2"></div>
+      <div class="disk ui-widget-content" style="--width: 3; --bg-color: purple" id="disk3" data-size="3"></div>
+      <div class="disk ui-widget-content" style="--width: 4; --bg-color: white" id="disk4" data-size="4"></div>
+    </div>
+    <div class="flex pole ui-widget-header" id="pole2">
+    </div>
+    <div class="flex pole ui-widget-header" id="pole3"></div>
+  </div>
+
+  <script>
+    $(function () {
+      $(".disk").draggable({
+        drag: function (event, ui) {
+
+        }
+      });
+
+
+      $(".pole").droppable({
+        drop: function (event, ui) {
+          let draggable = ui.draggable;                    //disk
+
+          console.log(draggable)
+          let curr_dragged_to_pole = event.target;       //currentpole target drop
+          let curr_dragged_to_pole_id = curr_dragged_to_pole.id; //dropped pole id
+          let curr_dragged_to_pole_children = curr_dragged_to_pole.children;  //dropped pole children
+          if (curr_dragged_to_pole_children.length == 0) {
+            $(draggable).prependTo("#" + curr_dragged_to_pole.id);
+          }
+          else {
+            console.log(draggable.data("size"), $(curr_dragged_to_pole_children).first().data('size'))
+            if (parseInt(draggable.data("size")) < parseInt($(curr_dragged_to_pole_children).first().data('size'))) {
+              $(draggable).prependTo("#" + curr_dragged_to_pole.id)
+            } else {
+              console.log("disk is greater")
+            }
+          }
+          $("#" + draggable[0].id).css({ "left": "0px", "top": "0px" });
+        }
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
